@@ -3,11 +3,6 @@ package com.example.chatserver.model;
 public class Message {
     private String content;
     private String sender;
-    private MessageType type;
-
-    public enum MessageType {
-        CHAT, JOIN, LEAVE
-    }
 
     public String getContent() {
         return content;
@@ -15,14 +10,6 @@ public class Message {
 
     public void setContent(String content) {
         this.content = content;
-    }
-
-    public MessageType getType() {
-        return type;
-    }
-
-    public void setType(MessageType type) {
-        this.type = type;
     }
 
     public String getSender() {
