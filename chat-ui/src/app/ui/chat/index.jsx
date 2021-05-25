@@ -1,18 +1,40 @@
 import React, { useRef, useState } from "react";
 import "./styles.css";
 import SockJSClient from "./components/SockJS";
+import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
 
 const SOCKET_URL = "http://localhost:8080/chat-server";
 
 const Chat = () => {
     const messageToOne = useRef(null);
     const [messages, setMessages] = useState([]);
+    const [erro, setErro] = useState(false);
 
     function onMessage(msg) {
         setMessages(messages => {
             const messagesNewState = [...messages, msg.content]
             return messagesNewState;
         })
+    }
+
+    async function handleSendMessage(event) {
+        if (messageToOne !== null) {
+            const response = await sendMessage({
+                sender: "Client",
+                content: messageToOne.current
+            });
+            if (response === ResponseSendMessage.ERRO) {
+                setErro(true);
+            }
+        }
+    }
+
+    if (erro) {
+        return (
+            <div>
+                <h1>ERROR</h1>
+            </div>
+        )
     }
 
     return (
@@ -39,7 +61,7 @@ const Chat = () => {
                             messageToOne.current = event.target.value;
                         }}
                     />
-                    <button>
+                    <button onClick={handleSendMessage}>
                         {"<-"}
                     </button>
                 </div>
