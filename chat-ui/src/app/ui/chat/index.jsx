@@ -1,7 +1,9 @@
 import React, { useRef, useState } from "react";
 import "./styles.css";
 import SockJSClient from "./components/SockJS";
+import Conversation from './components/conversation';
 import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
+import { useUser } from "../../context/index";
 
 const SOCKET_URL = "http://localhost:8080/chat-server";
 
@@ -9,18 +11,22 @@ const Chat = () => {
     const messageToOne = useRef(null);
     const [messages, setMessages] = useState([]);
     const [erro, setErro] = useState(false);
+    const { user } = useUser();
 
     function onMessage(msg) {
         setMessages(messages => {
-            const messagesNewState = [...messages, msg.content]
+            const messagesNewState = [...messages, {
+                sender: msg.sender,
+                content: msg.content
+            }]
             return messagesNewState;
         })
     }
 
     async function handleSendMessage(event) {
-        if (messageToOne !== null) {
+        if (messageToOne.current !== "") {
             const response = await sendMessage({
-                sender: "Client",
+                sender: user,
                 content: messageToOne.current
             });
             if (response === ResponseSendMessage.ERRO) {
@@ -44,14 +50,7 @@ const Chat = () => {
                 onMessage={onMessage}
             />
             <div id="chat">
-                <div className="conversation">
-                    {
-                        messages.map((message, index) => {
-                            return (<p key={index}>{message}</p>)
-                        })
-                    }
-
-                </div>
+                <Conversation messages={messages} />
                 <div className="send">
                     <input
                         className="msg"

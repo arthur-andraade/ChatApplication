@@ -1,0 +1,26 @@
+.message {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.message-user {
+    justify-content: flex-end;
+}
+
+.msg-body {
+    padding: 8px;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    background: var(--background-color);
+    color: var(--text-color);
+}
+
+.message + .message {
+    margin-top: 4px;
+}
+
+.message:last-child{
+    margin-bottom: 8px;
+}

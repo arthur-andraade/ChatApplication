@@ -1,22 +1,23 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-const initialValues = {
-    user: {
-        id: 0,
-        name: ""
-    }
-}
-const AppContext = createContext(initialValues);
+const AppContext = createContext();
 
-const AppProvider = ({ children }) => {
-    const [user, setUser] = useState(initialValues.user);
+export const AppProvider = ({ children }) => {
+    const [user, setUser] = useState("");
     return (
         <AppContext.Provider value={{
-            user: { user, setUser }
+            userState: { user, setUser }
         }}>
             {children}
         </AppContext.Provider>
     )
 }
 
-export default AppProvider;
+export function useUser() {
+    const { userState } = useContext(AppContext);
+    const { user, setUser } = userState;
+    return {
+        user,
+        setUser
+    }
+}

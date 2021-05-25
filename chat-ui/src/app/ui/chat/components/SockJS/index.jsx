@@ -16,21 +16,15 @@ const SockJSComponent = ({ url, onMessage }) => {
             })
         });
 
+    }, []);
+
+    useEffect(() => {
         return () => {
-            if (clientSockStompJS !== null) {
+            if (connected) {
                 clientSockStompJS.current.disconnect(() => {
                     console.log("Desconectado")
                 })
             }
-        }
-    }, []);
-
-    useEffect(() => {
-        if (connected) {
-            clientSockStompJS.current.send('/app/chat', {}, JSON.stringify({
-                sender: "Client",
-                content: "Hello Salve Word"
-            }));
         }
     }, [connected]);
 
