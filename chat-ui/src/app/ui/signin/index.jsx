@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { useUser } from "../../context"
+import "./styles.css";
 
 const SignIn = () => {
     const { setUser } = useUser();
