@@ -3,6 +3,7 @@ import Chat from "../chat";
 import HeaderApp from "../header";
 import { useUser } from "../../context";
 import SignIn from "../signin";
+import "./styles.css";
 
 const ContainerApp = () => {
     const { user } = useUser();

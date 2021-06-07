@@ -5,11 +5,9 @@ import './global.css';
 
 function App() {
   return (
-    <div className="App">
-      <AppProvider>
-        <ContainerApp />
-      </AppProvider>
-    </div>
+    <AppProvider>
+      <ContainerApp />
+    </AppProvider>
   );
 }
 
