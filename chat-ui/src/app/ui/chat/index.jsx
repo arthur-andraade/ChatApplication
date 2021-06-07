@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import "./styles.css";
 import SockJSClient from "./components/SockJS";
 import Conversation from './components/conversation';
+import ListUsers from "./components/list";
 import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
 import { useUser } from "../../context/index";
 
@@ -65,6 +66,7 @@ const Chat = () => {
                     </button>
                 </div>
             </div>
+            <ListUsers />
         </div>
     )
 }

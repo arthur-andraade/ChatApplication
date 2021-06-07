@@ -26,6 +26,7 @@
 
 .send .msg {
     width: 90%;
+    padding: 4px;
 }
 
 .send button {
@@ -37,7 +38,7 @@
     margin-left: auto;
 }
 
-.send button:hover{
+.send button:hover {
     color: var(--text-color);
     background: var(--background-color);
 }

@@ -4,9 +4,12 @@ const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState("");
+    const [listUsers, setListUsers] = useState([]);
+
     return (
         <AppContext.Provider value={{
-            userState: { user, setUser }
+            userState: { user, setUser },
+            listUsersState: { listUsers, setListUsers }
         }}>
             {children}
         </AppContext.Provider>
@@ -15,9 +18,10 @@ export const AppProvider = ({ children }) => {
 
 export function useUser() {
     const { userState } = useContext(AppContext);
-    const { user, setUser } = userState;
-    return {
-        user,
-        setUser
-    }
+    return userState;
+}
+
+export function useListUsers() {
+    const { listUsersState } = useContext(AppContext);
+    return listUsersState;
 }

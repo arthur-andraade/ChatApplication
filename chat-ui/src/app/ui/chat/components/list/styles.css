@@ -1,0 +1,14 @@
+#userlist {
+    display: flex;
+    flex-direction: column;
+    width: 200px;
+    height: 70vh;
+    margin-left: 10px;
+    background: var(--primary-color);
+    border-radius: 8px;
+    padding: 4px;
+}
+
+.user {
+    display: flex;
+}
