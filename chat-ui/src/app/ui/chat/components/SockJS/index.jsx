@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import SockJS from "sockjs-client";
 import Stomp from "stompjs";
 
-const SockJSComponent = ({ url, onMessage }) => {
+const SockJSComponent = ({ url, onMessage, onUser }) => {
     const [connected, setConnected] = useState(false);
     const clientSockStompJS = useRef(null);
 
@@ -11,23 +11,21 @@ const SockJSComponent = ({ url, onMessage }) => {
         clientSockStompJS.current.connect({}, (frame) => {
             setConnected(true);
             clientSockStompJS.current.subscribe('/topic/public', (messageFromServer) => {
-                console.log(messageFromServer);
                 onMessage(JSON.parse(messageFromServer.body));
             })
+            clientSockStompJS.current.subscribe('/topic/contacts', (user) => {
+                onUser(JSON.parse(user.body));
+            })
         });
-
     }, []);
 
     useEffect(() => {
         return () => {
             if (connected) {
-                clientSockStompJS.current.disconnect(() => {
-                    console.log("Desconectado")
-                })
+                clientSockStompJS.current.disconnect()
             }
         }
     }, [connected]);
-
 
     return (<></>);
 }
