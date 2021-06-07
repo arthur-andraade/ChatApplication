@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import "./styles.css";
 import SockJSClient from "./components/SockJS";
 import Conversation from './components/conversation';
-import ListUsers from "./components/list";
+import Contacts from "./components/list";
 import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
 import { useUser } from "../../context/index";
 
@@ -13,8 +13,9 @@ const Chat = () => {
     const [messages, setMessages] = useState([]);
     const [erro, setErro] = useState(false);
     const { user } = useUser();
+    const [contacts, setContacts] = useState([])
 
-    function onMessage(msg) {
+    function handleOnMessage(msg) {
         setMessages(messages => {
             const messagesNewState = [...messages, {
                 sender: msg.sender,
@@ -22,6 +23,12 @@ const Chat = () => {
             }]
             return messagesNewState;
         })
+    }
+
+    function handleOnUser(user) {
+        setContacts(contacts => {
+            return [...contacts, user]
+        });
     }
 
     async function handleSendMessage(event) {
@@ -48,7 +55,8 @@ const Chat = () => {
         <div id="chatContainer">
             <SockJSClient
                 url={SOCKET_URL}
-                onMessage={onMessage}
+                onMessage={handleOnMessage}
+                onUser={handleOnUser}
             />
             <div id="chat">
                 <Conversation messages={messages} />
@@ -66,7 +74,7 @@ const Chat = () => {
                     </button>
                 </div>
             </div>
-            <ListUsers />
+            <Contacts contacts={contacts} />
         </div>
     )
 }
