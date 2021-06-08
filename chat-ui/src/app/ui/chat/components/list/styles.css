@@ -11,4 +11,33 @@
 
 .user {
     display: flex;
+    justify-content: space-around;
+    background: #d4d7d8;
+    border-radius: 8px;
+}
+
+.user+.user {
+    margin-top: 5px;
+}
+
+.user .user-icon svg {
+    width: 40px;
+    height: 40px;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.user-status {
+    font-style: italic;
+}
+
+.on {
+    color: green;
+}
+
+.off {
+    color: grey;
 }
