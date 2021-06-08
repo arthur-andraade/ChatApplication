@@ -4,44 +4,43 @@ import Stomp from "stompjs";
 import { useUser } from "../../../../context";
 import ChatServer from "../../../../services/chat-server";
 
-const SockJSComponent = ({ url, onMessage, onUser }) => {
+const SOCKET_URL = "http://localhost:8080/chat-server";
+
+const SockJSComponent = ({ onMessage, onUser }) => {
     const { user } = useUser()
     const [connected, setConnected] = useState(false);
     const clientSockStompJS = useRef(null);
 
     useEffect(() => {
-        clientSockStompJS.current = Stomp.over(new SockJS(url));
+        clientSockStompJS.current = Stomp.over(new SockJS(SOCKET_URL));
         clientSockStompJS.current.connect({}, (frame) => {
             setConnected(true);
+            clientSockStompJS.current.subscribe('/topic/public', (messageFromServer) => {
+                onMessage(JSON.parse(messageFromServer.body));
+            });
+            clientSockStompJS.current.subscribe('/topic/contacts', (user) => {
+                onUser(JSON.parse(user.body));
+            });
         });
     }, []);
 
     useEffect(() => {
-        if (connected) {
+        if (connected && user.length !== 0) {
             ChatServer.post("/connect", {
                 name: user,
-                status: "on"
-            }).then(() => {
-                clientSockStompJS.current.subscribe('/topic/public', (messageFromServer) => {
-                    onMessage(JSON.parse(messageFromServer.body));
-                });
-                clientSockStompJS.current.subscribe('/topic/contacts', (user) => {
-                    onUser(JSON.parse(user.body));
-                });
             })
         }
 
         return () => {
             if (connected) {
                 ChatServer.post("/disconnect", {
-                    user: "Exemplo",
-                    status: "off"
+                    name: user,
                 }).then(() => {
                     clientSockStompJS.current.disconnect()
                 })
             }
         }
-    }, [connected]);
+    }, [connected, user]);
 
     return (<></>);
 }

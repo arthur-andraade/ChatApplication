@@ -5,7 +5,9 @@ import java.util.Set;
 import com.example.chatserver.model.Contact;
 import com.example.chatserver.storage.ContactsStorage;
 
+import org.springframework.stereotype.Service;
 
+@Service
 public class ContactsService {
 
     public Set<Contact> addContactChatList(String contact) throws Exception {

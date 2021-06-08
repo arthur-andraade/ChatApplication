@@ -6,8 +6,6 @@ import Contacts from "./components/list";
 import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
 import { useUser } from "../../context/index";
 
-const SOCKET_URL = "http://localhost:8080/chat-server";
-
 const Chat = () => {
     const messageToOne = useRef(null);
     const [messages, setMessages] = useState([]);
@@ -25,10 +23,8 @@ const Chat = () => {
         })
     }
 
-    function handleOnUser(user) {
-        setContacts(contacts => {
-            return [...contacts, user]
-        });
+    function handleOnUser(users) {
+        setContacts(users)
     }
 
     async function handleSendMessage(event) {
@@ -54,7 +50,6 @@ const Chat = () => {
     return (
         <div id="chatContainer">
             <SockJSClient
-                url={SOCKET_URL}
                 onMessage={handleOnMessage}
                 onUser={handleOnUser}
             />
