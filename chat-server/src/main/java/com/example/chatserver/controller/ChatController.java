@@ -1,6 +1,11 @@
 package com.example.chatserver.controller;
 
+import java.util.Set;
+
+import com.example.chatserver.dto.ContactBody;
 import com.example.chatserver.model.Message;
+import com.example.chatserver.model.Contact;
+import com.example.chatserver.service.ContactsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,24 +18,34 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 @Controller
-public class ChatController<Contact> {
+public class ChatController {
 
     @Autowired
-    SimpMessagingTemplate template;
+    private SimpMessagingTemplate template;
+
+    @Autowired
+    private ContactsService contactsService;
 
     @PostMapping("/connect")
-    public ResponseEntity<Void> connect(@RequestBody Contact contact){
-        return updateContacts(contact);
+    public ResponseEntity<Void> connect(@RequestBody ContactBody contact){
+        try {
+            Set<Contact> contacts = this.contactsService.addContactChatList(contact.getName());
+            this.template.convertAndSend("/topic/contacts", contacts);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/disconnect") 
-    public ResponseEntity<Void> disconnect(@RequestBody Contact contact){
-        return updateContacts(contact);
-    }
-
-    public ResponseEntity<Void> updateContacts(Contact contact){
-        template.convertAndSend("/topic/contacts", contact);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<Void> disconnect(@RequestBody ContactBody contact){
+        try {
+            Set<Contact> contacts = this.contactsService.updateStatusContactChat(contact.getName());
+            this.template.convertAndSend("/topic/contacts", contacts);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
     }
 
     @PostMapping("/send")
@@ -46,7 +61,7 @@ public class ChatController<Contact> {
     }
 
     @SendTo("/topic/contacts")
-    public Contact broadcasContacts(@Payload Contact contact) {
+    public Set<Contact> broadcasContacts(@Payload Set<Contact> contact) {
         return contact;
     }
 }

@@ -5,14 +5,13 @@ public class Contact {
     private Status status;
 
     public enum Status {
-        ONLINE("on"), 
-        OFFLINE("off");
+        ONLINE, 
+        OFFLINE;
+    }
 
-        public String status;
-
-        Status(String status){
-            this.status = status;
-        }
+    public Contact(String name, Status status){
+        this.name = name;
+        this.status = status;
     }
 
     public String getName() {
