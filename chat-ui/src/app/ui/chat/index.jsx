@@ -25,7 +25,16 @@ const Chat = () => {
     }
 
     function handleOnUser(users) {
-        setContacts(users)
+        const contacts = users.map((userList) => {
+            if(userList.name === user){
+                return {
+                    ...userList,
+                    name: "YOU",
+                }
+            }
+            return userList;
+        });
+        setContacts(contacts);
     }
 
     async function handleSendMessage(event) {
