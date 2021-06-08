@@ -7,10 +7,18 @@ import com.example.chatserver.model.Contact;
 
 
 public class ContactsStorage {
+    private static ContactsStorage instance;
     private Set<Contact> contacts;
 
     ContactsStorage() {
         this.contacts = new HashSet<Contact>();
+    }
+
+    public static synchronized ContactsStorage getInstance(){
+        if(instance == null){
+            instance = new ContactsStorage();
+        }
+        return instance;
     }
 
     public Set<Contact> saveContact(String contact)
