@@ -5,6 +5,7 @@ const styles = {
     ONLINE: "on",
     OFFLINE: "off"
 }
+
 const Contacts = ({ contacts }) =>
 (
     <div id="userlist">

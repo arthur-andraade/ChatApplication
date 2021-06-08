@@ -1,40 +1,30 @@
 package com.example.chatserver.storage;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 import com.example.chatserver.model.Contact;
 
-
 public class ContactsStorage {
     private static ContactsStorage instance;
-    private Set<Contact> contacts;
+    private List<Contact> contacts;
 
     ContactsStorage() {
-        this.contacts = new HashSet<Contact>();
+        contacts = new ArrayList<Contact>();
     }
 
-    public static synchronized ContactsStorage getInstance(){
-        if(instance == null){
+    public static synchronized ContactsStorage getInstance() {
+        if (instance == null) {
             instance = new ContactsStorage();
         }
         return instance;
     }
 
-    public Set<Contact> saveContact(String contact)
-            throws UnsupportedOperationException, ClassCastException, NullPointerException, IllegalArgumentException {
-        this.contacts.add(new Contact(contact, Contact.Status.ONLINE));
-        return this.contacts;
+    public List<Contact> getContacts(){
+        return contacts;
     }
 
-    public Set<Contact> updateContact(String contact) throws Exception{
-        Contact contactToUpdate = new Contact(contact, Contact.Status.ONLINE);
-        if(this.contacts.contains(contactToUpdate)){
-            this.contacts.remove(contactToUpdate);
-            this.contacts.add(new Contact(contactToUpdate.getName(), Contact.Status.OFFLINE));
-            return this.contacts;
-        }else{
-            throw new Exception();
-        }
+    public void setContacts(List<Contact> newContacts){
+        contacts = newContacts;
     }
 }

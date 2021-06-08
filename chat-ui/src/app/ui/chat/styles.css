@@ -42,3 +42,33 @@
     color: var(--text-color);
     background: var(--background-color);
 }
+
+.chat-side {
+    height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.chat-side .chat-exit {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.chat-side .chat-exit button {
+    padding: 2px 8px;
+    width: 12vw;
+    border: none;
+    background-color: red;
+    color: var(--primary-color);
+    font-size: 16px;
+    font-weight: bold;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.chat-side .chat-exit button:hover {
+    opacity: 0.9;
+}

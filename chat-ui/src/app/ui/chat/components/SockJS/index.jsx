@@ -33,11 +33,7 @@ const SockJSComponent = ({ onMessage, onUser }) => {
 
         return () => {
             if (connected) {
-                ChatServer.post("/disconnect", {
-                    name: user,
-                }).then(() => {
-                    clientSockStompJS.current.disconnect()
-                })
+                clientSockStompJS.current.disconnect();
             }
         }
     }, [connected, user]);

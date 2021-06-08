@@ -1,11 +1,12 @@
 package com.example.chatserver.controller;
 
-import java.util.Set;
+import java.util.List;
 
 import com.example.chatserver.dto.ContactBody;
 import com.example.chatserver.model.Message;
 import com.example.chatserver.model.Contact;
 import com.example.chatserver.service.ContactsService;
+import com.example.chatserver.storage.ContactsStorage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -29,8 +30,8 @@ public class ChatController {
     @PostMapping("/connect")
     public ResponseEntity<Void> connect(@RequestBody ContactBody contact){
         try {
-            Set<Contact> contacts = this.contactsService.addContactChatList(contact.getName());
-            this.template.convertAndSend("/topic/contacts", contacts);
+            this.contactsService.addContactChatList(contact.getName());
+            sendContacts();
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
@@ -40,12 +41,16 @@ public class ChatController {
     @PostMapping("/disconnect") 
     public ResponseEntity<Void> disconnect(@RequestBody ContactBody contact){
         try {
-            Set<Contact> contacts = this.contactsService.updateStatusContactChat(contact.getName());
-            this.template.convertAndSend("/topic/contacts", contacts);
+            this.contactsService.updateStatusContactChat(contact.getName());
+            sendContacts();
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             return ResponseEntity.badRequest().build();
         }
+    }
+
+    public void sendContacts(){
+        this.template.convertAndSend("/topic/contacts", ContactsStorage.getInstance().getContacts());
     }
 
     @PostMapping("/send")
@@ -61,7 +66,7 @@ public class ChatController {
     }
 
     @SendTo("/topic/contacts")
-    public Set<Contact> broadcasContacts(@Payload Set<Contact> contact) {
-        return contact;
+    public List<Contact> broadcasContacts(@Payload List<Contact> contacts) {
+        return contacts;
     }
 }

@@ -5,12 +5,13 @@ import Conversation from './components/conversation';
 import Contacts from "./components/list";
 import { sendMessage, ResponseSendMessage } from "./utils/sendMessage";
 import { useUser } from "../../context/index";
+import ChatServer from "../../services/chat-server";
 
 const Chat = () => {
     const messageToOne = useRef(null);
     const [messages, setMessages] = useState([]);
     const [erro, setErro] = useState(false);
-    const { user } = useUser();
+    const { user, setUser } = useUser();
     const [contacts, setContacts] = useState([])
 
     function handleOnMessage(msg) {
@@ -37,6 +38,16 @@ const Chat = () => {
                 setErro(true);
             }
         }
+    }
+
+    function handleExit(event) {
+        ChatServer.post("/disconnect", {
+            name: user,
+        }).then(() => {
+            setUser("")
+        }).catch(() => {
+            setErro(true);
+        });
     }
 
     if (erro) {
@@ -71,7 +82,14 @@ const Chat = () => {
                     </button>
                 </div>
             </div>
-            <Contacts contacts={contacts} />
+            <div className="chat-side">
+                <div className="chat-exit">
+                    <button onClick={handleExit}>
+                        EXIT
+                    </button>
+                </div>
+                <Contacts contacts={contacts} />
+            </div>
         </div>
     )
 }
